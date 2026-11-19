@@ -215,12 +215,13 @@ def _encode_wordpiece_tokens(tokens):
     # These are already WordPiece tokens. Convert them directly to IDs
     # instead of tokenizing them a second time.
     token_ids = BERT_TOKENIZER.convert_tokens_to_ids(tokens)
-    return BERT_TOKENIZER.prepare_for_model(
-        token_ids,
-        add_special_tokens=True,
-        return_attention_mask=True,
-        return_token_type_ids=True,
-    )
+    input_ids = BERT_TOKENIZER.build_inputs_with_special_tokens(token_ids)
+    token_type_ids = BERT_TOKENIZER.create_token_type_ids_from_sequences(token_ids)
+    return {
+        "input_ids": input_ids,
+        "attention_mask": [1] * len(input_ids),
+        "token_type_ids": token_type_ids,
+    }
 
 
 def bert_tokenize(batch_sentences):
