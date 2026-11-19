@@ -118,7 +118,7 @@ def load_pretrained(model, checkpoint_path, optimizer=None, device='cuda'):
 
 
 def load_pre_model(vocab_path, model_checkpoint_path):
-    DEVICE = "cuda:0" if torch.cuda.is_available() else "cpu"
+    DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"loading vocab from {vocab_path}")
     vocab = load_vocab_dict(vocab_path)
     model = load_model(vocab)
