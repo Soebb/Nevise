@@ -215,12 +215,17 @@ def _encode_wordpiece_tokens(tokens):
     # These are already WordPiece tokens. Convert them directly to IDs
     # instead of tokenizing them a second time.
     token_ids = BERT_TOKENIZER.convert_tokens_to_ids(tokens)
-    input_ids = BERT_TOKENIZER.build_inputs_with_special_tokens(token_ids)
-    token_type_ids = BERT_TOKENIZER.create_token_type_ids_from_sequences(token_ids)
+
+    # Build a single-sequence BERT input without tokenizer helper methods.
+    # Transformers 5.x no longer exposes some of the legacy methods.
+    cls_id = BERT_TOKENIZER.cls_token_id
+    sep_id = BERT_TOKENIZER.sep_token_id
+    input_ids = [cls_id] + token_ids + [sep_id]
+
     return {
         "input_ids": input_ids,
         "attention_mask": [1] * len(input_ids),
-        "token_type_ids": token_type_ids,
+        "token_type_ids": [0] * len(input_ids),
     }
 
 
