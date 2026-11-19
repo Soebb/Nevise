@@ -226,7 +226,7 @@ def bert_tokenize(batch_sentences):
     
     # max_seq_len = max([len(tokens) for tokens in batch_tokens])
     # batch_encoded_dicts = [BERT_TOKENIZER.encode_plus(tokens,max_length=max_seq_len,pad_to_max_length=True) for tokens in batch_tokens]
-    batch_encoded_dicts = [BERT_TOKENIZER(tokens) for tokens in batch_tokens]
+    batch_encoded_dicts = [BERT_TOKENIZER(tokens, is_split_into_words=True) for tokens in batch_tokens]
 
     batch_attention_masks = pad_sequence([torch.tensor(encoded_dict["attention_mask"]) for encoded_dict in batch_encoded_dicts],batch_first=True,padding_value=0)
     batch_input_ids = pad_sequence([torch.tensor(encoded_dict["input_ids"]) for encoded_dict in batch_encoded_dicts],batch_first=True,padding_value=0)
@@ -262,7 +262,7 @@ def bert_tokenize_for_valid_examples(batch_orginal_sentences, batch_noisy_senten
     
     batch_bert_dict = {"attention_mask":[],"input_ids":[],"token_type_ids":[]}
     if len(valid_idxs)>0:
-        batch_encoded_dicts = [BERT_TOKENIZER(tokens) for tokens in batch_tokens]
+        batch_encoded_dicts = [BERT_TOKENIZER(tokens, is_split_into_words=True) for tokens in batch_tokens]
         batch_attention_masks = pad_sequence([torch.tensor(encoded_dict["attention_mask"]) for encoded_dict in batch_encoded_dicts],batch_first=True,padding_value=0)
         batch_input_ids = pad_sequence([torch.tensor(encoded_dict["input_ids"]) for encoded_dict in batch_encoded_dicts],batch_first=True,padding_value=0)
         batch_token_type_ids = pad_sequence([torch.tensor(encoded_dict["token_type_ids"]) for encoded_dict in batch_encoded_dicts],batch_first=True,padding_value=0)
